@@ -11,6 +11,11 @@ struct PwdEntry {
     pwd: String,
 }
 
+enum ValidationAlgo {
+    One,
+    Two,
+}
+
 impl PwdEntry {
     fn new(tup: (i32, i32, char, String)) -> PwdEntry {
         PwdEntry {
@@ -25,24 +30,51 @@ impl PwdEntry {
 fn valid_passwords(passwords: &[PwdEntry]) -> i32 {
     let mut valid = 0;
     for entry in passwords {
-        if is_valid(entry) {
+        if is_valid(entry, ValidationAlgo::One) {
             valid += 1;
         }
     }
     valid
 }
-fn is_valid(entry: &PwdEntry) -> bool {
-    let m = entry.pwd.matches(entry.pat).count() as i32;
-    if m >= entry.low && m <= entry.high {
-        true
-    } else {
-        false
+
+fn valid_passwords2(passwords: &[PwdEntry]) -> i32 {
+    let mut valid = 0;
+    for entry in passwords {
+        if is_valid(entry, ValidationAlgo::Two) {
+            valid += 1;
+        }
+    }
+    valid
+}
+fn is_valid(entry: &PwdEntry, algo: ValidationAlgo) -> bool {
+    match algo {
+        ValidationAlgo::One => {
+            let m = entry.pwd.matches(entry.pat).count() as i32;
+            if m >= entry.low && m <= entry.high {
+                true
+            } else {
+                false
+            }
+        }
+        ValidationAlgo::Two => {
+            let m: Vec<_> = entry.pwd.match_indices(entry.pat).map(|x| x.0).collect();
+            let low: usize = entry.low as usize - 1;
+            let high: usize = entry.high as usize - 1;
+            if m.contains(&low) && m.contains(&high) {
+                false
+            } else if m.contains(&low) || m.contains(&high) {
+                true
+            } else {
+                false
+            }
+        }
     }
 }
 fn main() {
     let input = input().unwrap();
 
-    println!("Solution: {}", valid_passwords(&input));
+    println!("Part One: {}", valid_passwords(&input));
+    println!("Part Two: {}", valid_passwords2(&input));
 }
 
 fn input() -> io::Result<Vec<PwdEntry>> {
@@ -79,5 +111,13 @@ fn test_matt() {
             PwdEntry::new((2, 9, 'c', "ccccccccc".to_string()))
         ]),
         2
-    )
+    );
+    assert_eq!(
+        valid_passwords2(&vec![
+            PwdEntry::new((1, 3, 'a', "abcde".to_string())),
+            PwdEntry::new((1, 3, 'b', "cdefg".to_string())),
+            PwdEntry::new((2, 9, 'c', "ccccccccc".to_string()))
+        ]),
+        1
+    );
 }
