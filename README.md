@@ -27,6 +27,6 @@ name = "{my_cool_name}"
 path = "src/{my_cool_name}.rs"
 ```
 
-* To execute you binary, call `cargo` with `--bin {my_cool_name``}` in the `day-x` folder.
+* To execute you binary, call `cargo` with `--bin {my_cool_name}` in the `day-x` folder.
     - `cd day-1`
     - `cargo run --bin {my_cool_name}`
