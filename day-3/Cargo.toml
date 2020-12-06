@@ -12,3 +12,7 @@ edition = "2018"
 [[bin]]
 name = "matt"
 path = "src/matt.rs"
+
+[[bin]]
+name = "vickz84259"
+path = "src/vickz84259.rs"
