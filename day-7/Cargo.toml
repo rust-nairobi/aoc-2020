@@ -7,7 +7,21 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+itertools = { version = "^0.9", optional = true}
+
+
+[features]
+vickz84259 = ["itertools"]
+
 
 [[bin]]
 name = "matt"
 path = "src/matt.rs"
+
+
+[[bin]]
+name = "vickz84259"
+path = "src/vickz84259.rs"
+required-features = ["vickz84259"]
+
+
